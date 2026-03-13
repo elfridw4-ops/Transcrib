@@ -1,0 +1,8 @@
+{
+  "name": "Transcribe & Translate AI",
+  "description": "Une application intelligente pour transcrire, traduire et générer des sous-titres à partir de vidéos, avec export Word et PDF.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
