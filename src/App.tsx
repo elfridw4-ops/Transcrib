@@ -28,6 +28,7 @@ import { transcribeVideo, translateTranscription, TranscriptionResult, Transcrip
 import { generateSRT, generateVTT, downloadFile, generateDocx, generatePdf } from './services/export';
 import FeedbackFab from './components/FeedbackFab';
 import FeatureRating from './components/FeatureRating';
+import InstallPrompt from './components/InstallPrompt';
 import AdminFeedbackDashboard from './components/AdminFeedbackDashboard';
 
 // Custom interface for FAQ Accordion
@@ -191,6 +192,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900 font-sans selection:bg-indigo-100 selection:text-indigo-900">
+      <InstallPrompt />
       
       {/* GLOBAL HEADER / NAVBAR */}
       <nav id="navbar" className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100 px-6 py-4">
