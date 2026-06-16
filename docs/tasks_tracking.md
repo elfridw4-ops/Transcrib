@@ -25,4 +25,6 @@
 - **TASK-014 :** Sécurisation étanche de la Console d'Administration (Garde d'accès physique "Security Gate" par mot de passe admin, stockage sessionStorage, header HTTP x-admin-key de validation, codes correcteurs d'erreur de session 401). (Priorité : P0)
 - **TASK-015 :** Résolution du freeze d'iframe sur le formulaire de retour (Remplacement de la validation HTML5 native par la validation applicative douce, sécurisation des z-index). (Priorité : P0)
 - **TASK-016 :** Optimisation et flexibilité de défilement de la modale de retours sous limites de hauteur (ajustement de max-h et overflow-y pour éviter les coupures sur de faibles résolutions/iframes). (Priorité : P0)
+- **TASK-017 :** Retrait du bouton Admin public dans la barre de navigation et mise en place d'une dissimulation ergonomique d'accès (micro-geste d'appui prolongé continu de 5 secondes sur le logo de marque, doublé d'un raccourci d'accessibilité clavier global Ctrl + Alt + A). (Priorité : P1)
+
 

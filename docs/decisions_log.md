@@ -64,3 +64,12 @@
 - **Alternatives envisagées :** Espérer que le parent ou le document complet défile (impossible, car le conteneur du modal est en `fixed inset-0` centré), ou supprimer des champs pour raccourcir l'affichage (rejeté car cela détruit la rigueur diagnostique et la conformité légale RGPD).
 - **Conséquences :** Tous les composants de la boîte de dialogue, y compris l'en-tête et les touches primaires d'action de validation, restent continuellement exploitables même sur les supports de taille réduite et les iframes intégrés.
 
+## ADR-09 — Dissimulation du point d'entrée d'administration et Déclenchement secret par appui prolongé ou Clavier
+- **Date :** 2026-06-16
+- **Statut :** Accepté
+- **Contexte :** La présence directe d'une option d'accès à l'administration dans le menu de navigation public nuit à l'accessibilité globale et à l’esthétique professionnelle de l'application vis-à-vis des clients normaux. Elle indique aussi trop ostensiblement l'existence d'un panneau d'administration sensible.
+- **Décision :** Retirer entièrement le bouton "Admin" textuel de la barre de navigation. Reconvertir le logo Globe de la marque comme un point d'action double : un clic simple assure la navigation vers la page d'accueil d'origine, tandis qu'un appui continu (Hold) de plus de 5 secondes sur l'icône Globe débloque secrètement le routage vers l’administration. Pour garantir une accessibilité 100% universelle et respectueuse de l'accessibilité technique (IHM, claviers, lecteurs d'écrans), un raccourci clavier global discret combiné `Ctrl + Alt + A` (ou `Cmd + Alt + A` sur macOS) a été implémenté en soutien technologique direct.
+- **Alternatives envisagées :** Conserver le raccourci textuel visible (non-élégant), masquer l'URL (impossible sur des layouts SPA à routage d'état), ou utiliser une suite d'interactions complexes (trop sujettes aux erreurs).
+- **Conséquences :** L'interface publique est parfaitement épurée pour les utilisateurs de l'application sans rompre la sécurité et l'usage d'analyse pour le Lead Developer. Une micro-animation fluide de rotation s'anime lentement en cas de hold de sécurité pour signifier l'ouverture d'un portail.
+
+

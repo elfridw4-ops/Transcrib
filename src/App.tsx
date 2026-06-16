@@ -54,6 +54,44 @@ export default function App() {
   // State pour la gestion du drag and drop
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  // Secret Admin opening triggers (5-second hold and accessibility shortcuts)
+  const pressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isPressingSecret, setIsPressingSecret] = useState(false);
+
+  const startSecretPress = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    setIsPressingSecret(true);
+    if (pressTimerRef.current) clearTimeout(pressTimerRef.current);
+    
+    pressTimerRef.current = setTimeout(() => {
+      setActiveTab('admin');
+      setIsPressingSecret(false);
+    }, 5000); // Trigger after 5 seconds of continuous holding
+  };
+
+  const stopSecretPress = () => {
+    setIsPressingSecret(false);
+    if (pressTimerRef.current) {
+      clearTimeout(pressTimerRef.current);
+      pressTimerRef.current = null;
+    }
+  };
+
+  // Keyboard shortcut as expert accessibility fallback (Ctrl + Alt + A)
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.altKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        setActiveTab('admin');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      if (pressTimerRef.current) clearTimeout(pressTimerRef.current);
+    };
+  }, []);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,11 +195,28 @@ export default function App() {
       {/* GLOBAL HEADER / NAVBAR */}
       <nav id="navbar" className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('landing')}>
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200">
-              <Globe className="w-5 h-5 animate-pulse" />
+          <div className="flex items-center gap-3">
+            <div 
+              className="relative cursor-pointer select-none"
+              onMouseDown={startSecretPress}
+              onMouseUp={stopSecretPress}
+              onMouseLeave={stopSecretPress}
+              onTouchStart={startSecretPress}
+              onTouchEnd={stopSecretPress}
+              title="Maintenez le logo appuyé pendant 5 secondes pour déverrouiller l'accès"
+            >
+              <div className={`w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 transition-all duration-500 ${
+                isPressingSecret ? 'scale-110 bg-indigo-700 ring-4 ring-indigo-250' : 'hover:scale-105'
+              }`}>
+                <Globe className={`w-5 h-5 ${isPressingSecret ? 'animate-spin text-amber-300' : 'animate-pulse'}`} />
+              </div>
+              {isPressingSecret && (
+                <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-[9px] px-1.5 py-0.5 rounded shadow whitespace-nowrap z-50 font-mono animate-pulse uppercase tracking-wider">
+                  Accès...
+                </span>
+              )}
             </div>
-            <div>
+            <div className="cursor-pointer" onClick={() => setActiveTab('landing')}>
               <span className="font-bold text-lg tracking-tight text-zinc-900 block">Transcribe & Translate AI</span>
               <span className="text-[10px] uppercase tracking-widest text-indigo-600 font-semibold block">Solution Locale Intelligente</span>
             </div>
@@ -172,15 +227,6 @@ export default function App() {
             <button onClick={() => { setActiveTab('landing'); setTimeout(() => document.getElementById('fonctionnalites')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="hover:text-indigo-600 transition-colors cursor-pointer">Fonctionnalités</button>
             <button onClick={() => { setActiveTab('landing'); setTimeout(() => document.getElementById('usages')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="hover:text-indigo-600 transition-colors cursor-pointer">Cas d'usage</button>
             <button onClick={() => { setActiveTab('landing'); setTimeout(() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="hover:text-indigo-600 transition-colors cursor-pointer">FAQ</button>
-            <button 
-              onClick={() => setActiveTab('admin')} 
-              className={`hover:text-indigo-600 transition-colors cursor-pointer font-bold flex items-center gap-1.5 ${
-                activeTab === 'admin' ? 'text-indigo-600' : 'text-zinc-500'
-              }`}
-            >
-              <Shield className="w-4 h-4" />
-              Admin
-            </button>
           </div>
 
           <div className="flex items-center gap-3">
