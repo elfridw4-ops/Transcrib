@@ -50,7 +50,8 @@
   - **Impact :** Élimination de la validation HTML5 native (attributs required) qui bloquait silencieusement la soumission au sein des contextes sandboxés d'Iframe ; mise en œuvre d'une architecture de validation applicative douce intégrée offrant des retours d'erreurs graphiques clairs et sans blocage. Repositionnement des calques z-index pour écarter tout risque de masquage par l'overlay d'arrière-plan.
   - **Modification (Hauteur Modale Dynamique & Défilement) :** Résolution des coupures et troncatures verticales de la modale dans les iframes de faible hauteur.
   - **Impact :** Remplacement du masque de débordement statique par une limite de hauteur relative dynamique `max-h-[calc(100vh-2rem)]` et une directive `overflow-y-auto`. Le formulaire est maintenant entièrement explorable et valide sur de petites fenêtres sans être amputé en tête ou en bas.
-  - **Modification (Dissimulation Admin & Accessibilité Récursive) :** Retrait du bouton Admin public dans la barre de navigation et mise en place d'une dissimulation d'accès secret.
-  - **Impact :** Élimination de l'entrée d'administration ostentatoire du menu public. Accès super-utilisateur sécurisé via un Hold d'IHM de 5 secondes sur le logo de marque (avec retour visuel progressif) ou comme raccourci d’accessibilité clavier universelle via la combinaison `Ctrl + Alt + A` (ou `Cmd + Alt + A`). 
+  - **Modification (Hold Admin Access) :** Dissimulation du bouton Admin via appui long de 5s sur le logo.
+  - **Modification (PWA & Social Sharing) :** Transformation en application web progressive installable et optimisation du partage social.
+  - **Impact :** Support hors ligne, icônes multi-plateformes, bouton d'installation dynamique et intégration des balises Open Graph/Twitter pour un partage professionnel. Ajout d'une page de notes de version (Changelog) accessible depuis le footer.
 
 

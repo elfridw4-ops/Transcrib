@@ -21,7 +21,8 @@ import {
   HelpCircle,
   FileIcon,
   Laptop,
-  Shield
+  Shield,
+  Share2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { transcribeVideo, translateTranscription, TranscriptionResult, TranscriptionSegment } from './services/gemini';
@@ -30,6 +31,7 @@ import FeedbackFab from './components/FeedbackFab';
 import FeatureRating from './components/FeatureRating';
 import InstallPrompt from './components/InstallPrompt';
 import AdminFeedbackDashboard from './components/AdminFeedbackDashboard';
+import Changelog from './components/Changelog';
 
 // Custom interface for FAQ Accordion
 interface FaqItem {
@@ -39,7 +41,7 @@ interface FaqItem {
 
 export default function App() {
   // Navigation State
-  const [activeTab, setActiveTab] = useState<'landing' | 'workspace' | 'admin'>('landing');
+  const [activeTab, setActiveTab] = useState<'landing' | 'workspace' | 'admin' | 'changelog'>('landing');
 
   // App / Processing State
   const [file, setFile] = useState<File | null>(null);
@@ -100,6 +102,26 @@ export default function App() {
       setFile(e.target.files[0]);
       setResult(null);
       setTranslation(null);
+      setActiveTab('workspace');
+    }
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Transcribe & Translate AI',
+      text: 'Transcription et traduction vidéo IA locale et sécurisée.',
+      url: window.location.origin
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.origin);
+        alert('Lien copié dans le presse-papier !');
+      }
+    } catch (err) {
+      console.error('Erreur lors du partage:', err);
     }
   };
 
@@ -232,6 +254,14 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button 
+              onClick={handleShare}
+              className="p-2.5 rounded-xl border border-zinc-100 bg-white text-zinc-600 hover:text-indigo-600 hover:border-indigo-100 transition-all cursor-pointer"
+              title="Partager l'application"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
+
             <button 
               onClick={() => setActiveTab(activeTab === 'workspace' ? 'landing' : 'workspace')}
               className={`px-5 py-2.5 rounded-xl font-medium transition-all duration-200 text-sm flex items-center gap-2 cursor-pointer ${
@@ -806,11 +836,34 @@ export default function App() {
           </motion.div>
         )}
 
+        {/* CHANGELOG TAB VIEW */}
+        {activeTab === 'changelog' && (
+          <motion.div
+            key="changelog"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.3 }}
+            className="max-w-7xl mx-auto px-4 md:px-8 py-20"
+          >
+            <Changelog />
+          </motion.div>
+        )}
+
       </AnimatePresence>
 
       <footer className="mt-20 pb-10 text-center text-zinc-400 text-sm border-t border-zinc-100 pt-8 max-w-7xl mx-auto px-6">
         <p>© 2026 Transcribe & Translate AI - Solution de traitement local sécurisée</p>
-        <p className="text-xs text-zinc-300 mt-1">Version 1.1.0 - Équipé de Gemini Flash</p>
+        <div className="flex items-center justify-center gap-4 mt-2">
+          <p className="text-xs text-zinc-300">Version 1.1.0 - Équipé de Gemini Flash</p>
+          <span className="text-zinc-200">|</span>
+          <button 
+            onClick={() => setActiveTab('changelog')}
+            className="text-xs text-indigo-400 hover:text-indigo-600 underline underline-offset-4 cursor-pointer"
+          >
+            Notes de version
+          </button>
+        </div>
       </footer>
 
       {/* COMPOSANT PERSISTANT GLOBAL DE SIGNALEMENT FEEDBACK ROUTABLE */}
