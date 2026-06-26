@@ -32,6 +32,7 @@ import FeatureRating from './components/FeatureRating';
 import InstallPrompt from './components/InstallPrompt';
 import AdminFeedbackDashboard from './components/AdminFeedbackDashboard';
 import Changelog from './components/Changelog';
+import LegalPages from './components/LegalPages';
 
 // Custom interface for FAQ Accordion
 interface FaqItem {
@@ -41,7 +42,8 @@ interface FaqItem {
 
 export default function App() {
   // Navigation State
-  const [activeTab, setActiveTab] = useState<'landing' | 'workspace' | 'admin' | 'changelog'>('landing');
+  const [activeTab, setActiveTab] = useState<'landing' | 'workspace' | 'admin' | 'changelog' | 'legal'>('landing');
+  const [legalSubTab, setLegalSubTab] = useState<'mentions' | 'cgu' | 'privacy' | 'cookies'>('mentions');
 
   // App / Processing State
   const [file, setFile] = useState<File | null>(null);
@@ -850,18 +852,62 @@ export default function App() {
           </motion.div>
         )}
 
+        {/* LEGAL PAGES TAB VIEW */}
+        {activeTab === 'legal' && (
+          <motion.div
+            key="legal"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.3 }}
+          >
+            <LegalPages 
+              onBack={() => setActiveTab('landing')} 
+              initialTab={legalSubTab} 
+            />
+          </motion.div>
+        )}
+
       </AnimatePresence>
 
       <footer className="mt-20 pb-10 text-center text-zinc-400 text-sm border-t border-zinc-100 pt-8 max-w-7xl mx-auto px-6">
         <p>© 2026 Transcribe & Translate AI - Solution de traitement local sécurisée</p>
-        <div className="flex items-center justify-center gap-4 mt-2">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-2">
           <p className="text-xs text-zinc-300">Version 1.1.0 - Équipé de Gemini Flash</p>
-          <span className="text-zinc-200">|</span>
+          <span className="text-zinc-200 hidden sm:inline">|</span>
           <button 
             onClick={() => setActiveTab('changelog')}
             className="text-xs text-indigo-400 hover:text-indigo-600 underline underline-offset-4 cursor-pointer"
           >
             Notes de version
+          </button>
+          <span className="text-zinc-200">|</span>
+          <button 
+            onClick={() => { setActiveTab('legal'); setLegalSubTab('mentions'); }}
+            className="text-xs text-zinc-500 hover:text-indigo-600 hover:underline cursor-pointer"
+          >
+            Mentions légales
+          </button>
+          <span className="text-zinc-200">|</span>
+          <button 
+            onClick={() => { setActiveTab('legal'); setLegalSubTab('cgu'); }}
+            className="text-xs text-zinc-500 hover:text-indigo-600 hover:underline cursor-pointer"
+          >
+            CGU
+          </button>
+          <span className="text-zinc-200">|</span>
+          <button 
+            onClick={() => { setActiveTab('legal'); setLegalSubTab('privacy'); }}
+            className="text-xs text-zinc-500 hover:text-indigo-600 hover:underline cursor-pointer"
+          >
+            Confidentialité
+          </button>
+          <span className="text-zinc-200">|</span>
+          <button 
+            onClick={() => { setActiveTab('legal'); setLegalSubTab('cookies'); }}
+            className="text-xs text-zinc-500 hover:text-indigo-600 hover:underline cursor-pointer"
+          >
+            Cookies
           </button>
         </div>
       </footer>
